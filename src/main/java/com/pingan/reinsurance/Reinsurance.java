@@ -89,7 +89,7 @@ public class Reinsurance extends ChaincodeBase {
 			return "{\"Error\":\"Incorrect number of arguments. Expecting name of the person to query\"}";
 		}
 		String am =stub.getState(args[0]);
-		if (am!=null&&!am.isEmpty()){
+		if (am !=null && !am.isEmpty()){
 			try{
 				int valA = Integer.parseInt(am);
 				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
@@ -108,7 +108,6 @@ public class Reinsurance extends ChaincodeBase {
 	private String  transfer(ChaincodeStub stub, String[] args) {
 		System.out.println("in transfer");
 
-		System.out.println("in transfer");
 		if(args.length!=3){
 			System.out.println("Incorrect number of arguments:"+args.length);
 			return "{\"Error\":\"Incorrect number of arguments. Expecting 3: from, to, amount\"}";
@@ -119,7 +118,7 @@ public class Reinsurance extends ChaincodeBase {
 		String toAm=stub.getState(toName);
 		String am =args[2];
 		int valFrom=0;
-		if (fromAm!=null&&!fromAm.isEmpty()){
+		if (fromAm != null && !fromAm.isEmpty()){
 			try{
 				valFrom = Integer.parseInt(fromAm);
 			}catch(NumberFormatException e ){
@@ -131,7 +130,7 @@ public class Reinsurance extends ChaincodeBase {
 		}
 
 		int valTo=0;
-		if (toAm!=null&&!toAm.isEmpty()){
+		if (toAm !=null && !toAm.isEmpty()){
 			try{
 				valTo = Integer.parseInt(toAm);
 			}catch(NumberFormatException e ){
