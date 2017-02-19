@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Eclipse" />
+    <bytecodeTargetLevel>
+      <module name="reinsurance_main" target="1.5" />
+      <module name="reinsurance_test" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

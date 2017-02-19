@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reinsurance.iml" filepath="$PROJECT_DIR$/.idea/modules/reinsurance.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reinsurance_main.iml" filepath="$PROJECT_DIR$/.idea/modules/reinsurance_main.iml" group="reinsurance" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reinsurance_test.iml" filepath="$PROJECT_DIR$/.idea/modules/reinsurance_test.iml" group="reinsurance" />
+    </modules>
+  </component>
+</project>
