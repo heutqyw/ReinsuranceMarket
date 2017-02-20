@@ -89,6 +89,10 @@ public class Reinsurance extends ChaincodeBase {
 			return "{\"Error\":\"Incorrect number of arguments. Expecting name of the person to query\"}";
 		}
 		String am =stub.getState(args[0]);
+		if(am == null){
+			am ="am is empty";
+		}
+		log.info("getCompanyById am:"+am);
 		if (am !=null && !am.isEmpty()){
 			try{
 				int valA = Integer.parseInt(am);
@@ -106,7 +110,7 @@ public class Reinsurance extends ChaincodeBase {
 	}
 
 	private String  transfer(ChaincodeStub stub, String[] args) {
-		System.out.println("in transfer");
+		log.info("in transfer");
 
 		if(args.length!=3){
 			System.out.println("Incorrect number of arguments:"+args.length);
@@ -118,6 +122,7 @@ public class Reinsurance extends ChaincodeBase {
 		String toAm=stub.getState(toName);
 		String am =args[2];
 		int valFrom=0;
+		log.info("fromAm :"+fromAm);
 		if (fromAm != null && !fromAm.isEmpty()){
 			try{
 				valFrom = Integer.parseInt(fromAm);
@@ -130,6 +135,7 @@ public class Reinsurance extends ChaincodeBase {
 		}
 
 		int valTo=0;
+		log.info("toAm :"+toAm);
 		if (toAm !=null && !toAm.isEmpty()){
 			try{
 				valTo = Integer.parseInt(toAm);
@@ -163,7 +169,7 @@ public class Reinsurance extends ChaincodeBase {
 	}
 
 	public String init(ChaincodeStub stub, String function, String[] args) {
-		System.out.println("{\"info\":\"come into method init \"}");
+		log.info("{\"info\":\"come into method init \"}");
 		if(args.length!=2){
 			return "{\"Error\":\"Incorrect number of arguments. Expecting 2\"}";
 		}
@@ -173,6 +179,8 @@ public class Reinsurance extends ChaincodeBase {
 			int valB = Integer.parseInt(args[3]);
 			stub.putState(args[0], args[1]);
 			stub.putState(args[2], args[3]);
+			log.info("{\"info\":\"init a: \"}"+stub.getState("a"));
+			log.info("{\"info\":\"init b: \"}"+stub.getState("b"));
 		}catch(NumberFormatException e ){
 			return "{\"Error\":\"Expecting integer value for asset holding\"}";
 		}
