@@ -28,96 +28,37 @@ import java.util.List;
 
 public class Reinsurance extends ChaincodeBase {
 	private static Log log = LogFactory.getLog(Reinsurance.class);
-	private static String companyTableName = "pa_company";
+
+
 	@Override
 	public String run(ChaincodeStub stub, String function, String[] args) {
 		log.info("In run, function:"+function);
 
-		if (function.equals("init")) {
-			return init(stub, function, args);
-		} else if (function.equals("createCompany")) {
-			return createCompany(stub, args);
-		} else if (function.equals("editCompany")) {
-			return editCompany(stub, args);
-		} else if (function.equals("getCompanyById")) {
-			return getCompanyById(stub, args);
-		} else if (function.equals("deleteCompanies")) {
-			return deleteCompanies(stub, args);
-		} else if (function.equals("transfer")) {
-			return transfer(stub, args);
-		} else if (function.equals("writeTransaction")) {
-			return writeTransaction(stub, args);
-		} else {
-			return noMethodWarning();
-		}
-	}
-
-	private String noMethodWarning() {
-		return "";
-	}
-
-	private String writeTransaction(ChaincodeStub stub, String[] args) {
-		return "";
-	}
-
-	private String editCompany(ChaincodeStub stub, String[] args) {
-		return "";
-	}
-
-	private String createCompany(ChaincodeStub stub, String[] args) {
-		return "";
-	}
-
-	private String deleteCompanies(ChaincodeStub stub, String[] args) {
-		return "";
-	}
-
-	@Override
-	public String query(ChaincodeStub stub, String function, String[] args) {
-		log.info("In query, function:"+function);
-
-		String am =stub.getState(args[0]);
-		log.info("In query, valA:"+am);
-		if (am !=null &&!am.isEmpty()){
-			try{
-				int valA = Integer.parseInt(am);
-				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
-			}catch(NumberFormatException e ){
-				return "{\"Error\":\"Expecting integer value for asset holding\"}";
-			}		}else{
-			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
-		}
-	}
-
-
-	private String getCompanyById(ChaincodeStub stub, String[] args) {
-		if(args.length!=1){
-			return "{\"Error\":\"Incorrect number of arguments. Expecting name of the person to query\"}";
-		}
-		String am =stub.getState(args[0]);
-		if(am == null){
-			am ="am is empty";
-		}
-		log.info("getCompanyById am:"+am);
-		if (am !=null && !am.isEmpty()){
-			try{
-				int valA = Integer.parseInt(am);
-				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
-			}catch(NumberFormatException e ){
-				return "{\"Error\":\"Expecting integer value for asset holding\"}";
-			}		}else{
-			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
+		switch (function) {
+			case "init":
+				init(stub, function, args);
+				break;
+			case "transfer":
+				String re = transfer(stub, args);
+				System.out.println(re);
+				return re;
+			case "put":
+				for (int i = 0; i < args.length; i += 2)
+					stub.putState(args[i], args[i + 1]);
+				break;
+			case "del":
+				for (String arg : args)
+					stub.delState(arg);
+				break;
+			default:
+				return transfer(stub, args);
 		}
 
-	}
-
-	private String getCompanys(ChaincodeStub stub, String[] args) {
-		return "";
+		return null;
 	}
 
 	private String  transfer(ChaincodeStub stub, String[] args) {
-		log.info("in transfer");
-
+		System.out.println("in transfer");
 		if(args.length!=3){
 			System.out.println("Incorrect number of arguments:"+args.length);
 			return "{\"Error\":\"Incorrect number of arguments. Expecting 3: from, to, amount\"}";
@@ -128,8 +69,7 @@ public class Reinsurance extends ChaincodeBase {
 		String toAm=stub.getState(toName);
 		String am =args[2];
 		int valFrom=0;
-		log.info("fromAm :"+fromAm);
-		if (fromAm != null && !fromAm.isEmpty()){
+		if (fromAm!=null&&!fromAm.isEmpty()){
 			try{
 				valFrom = Integer.parseInt(fromAm);
 			}catch(NumberFormatException e ){
@@ -141,8 +81,7 @@ public class Reinsurance extends ChaincodeBase {
 		}
 
 		int valTo=0;
-		log.info("toAm :"+toAm);
-		if (toAm !=null && !toAm.isEmpty()){
+		if (toAm!=null&&!toAm.isEmpty()){
 			try{
 				valTo = Integer.parseInt(toAm);
 			}catch(NumberFormatException e ){
@@ -171,30 +110,50 @@ public class Reinsurance extends ChaincodeBase {
 		System.out.println("Transfer complete");
 
 		return null;
-		
+
 	}
 
 	public String init(ChaincodeStub stub, String function, String[] args) {
-		log.info("{\"info\":\"come into method init \"}");
-		if(args.length!=2){
-			return "{\"Error\":\"Incorrect number of arguments. Expecting 2\"}";
+		if(args.length!=4){
+			return "{\"Error\":\"Incorrect number of arguments. Expecting 4\"}";
 		}
-
 		try{
-			log.info("init begin putState args[1]:"+args[1]);
+			log.info("init <--------------------->");
 			int valA = Integer.parseInt(args[1]);
 			int valB = Integer.parseInt(args[3]);
+			log.info("init valA:<--------------------->"+valA);
+			log.info("init args[0]:<--------------------->"+args[0]);
+			log.info("init args[1]:<--------------------->"+args[1]);
 			stub.putState(args[0], args[1]);
 			stub.putState(args[2], args[3]);
-			log.info("init putState args[3] end:"+args[3]);
-			log.info("{\"info\":\"init a: \"}"+stub.getState("a"));
-			log.info("{\"info\":\"init b: \"}"+stub.getState("b"));
+			log.info("init args[2]:<--------------------->"+args[2]);
+			log.info("init args[3]:<--------------------->"+args[3]);
 		}catch(NumberFormatException e ){
 			return "{\"Error\":\"Expecting integer value for asset holding\"}";
 		}
-
-
 		return null;
+	}
+
+
+	@Override
+	public String query(ChaincodeStub stub, String function, String[] args) {
+		if(args.length!=1){
+			return "{\"Error\":\"Incorrect number of arguments. Expecting name of the person to query\"}";
+		}
+		log.info("query <--------------------->");
+		String am =stub.getState(args[0]);
+		log.info("query am:<--------------------->"+am);
+		if (am!=null&&!am.isEmpty()){
+			try{
+				int valA = Integer.parseInt(am);
+				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
+			}catch(NumberFormatException e ){
+				return "{\"Error\":\"Expecting integer value for asset holding\"}";
+			}		}else{
+			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
+		}
+
+
 	}
 
 
