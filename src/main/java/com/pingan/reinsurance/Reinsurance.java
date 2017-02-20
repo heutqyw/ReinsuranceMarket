@@ -39,6 +39,8 @@ public class Reinsurance extends ChaincodeBase {
 			return createCompany(stub, args);
 		} else if (function.equals("editCompany")) {
 			return editCompany(stub, args);
+		} else if (function.equals("getCompanyById")) {
+			return getCompanyById(stub, args);
 		} else if (function.equals("deleteCompanies")) {
 			return deleteCompanies(stub, args);
 		} else if (function.equals("transfer")) {
@@ -74,12 +76,16 @@ public class Reinsurance extends ChaincodeBase {
 	public String query(ChaincodeStub stub, String function, String[] args) {
 		log.info("In query, function:"+function);
 
-		if (function.equals("getCompanys")) {
-			return getCompanys(stub, args);
-		} else if (function.equals("getCompanyById")) {
-			return getCompanyById(stub, args);
-		} else {
-			return noMethodWarning();
+		String am =stub.getState(args[0]);
+		log.info("In query, valA:"+am);
+		if (am !=null &&!am.isEmpty()){
+			try{
+				int valA = Integer.parseInt(am);
+				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
+			}catch(NumberFormatException e ){
+				return "{\"Error\":\"Expecting integer value for asset holding\"}";
+			}		}else{
+			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
 		}
 	}
 
@@ -175,10 +181,12 @@ public class Reinsurance extends ChaincodeBase {
 		}
 
 		try{
+			log.info("init begin putState args[1]:"+args[1]);
 			int valA = Integer.parseInt(args[1]);
 			int valB = Integer.parseInt(args[3]);
 			stub.putState(args[0], args[1]);
 			stub.putState(args[2], args[3]);
+			log.info("init putState args[3] end:"+args[3]);
 			log.info("{\"info\":\"init a: \"}"+stub.getState("a"));
 			log.info("{\"info\":\"init b: \"}"+stub.getState("b"));
 		}catch(NumberFormatException e ){
