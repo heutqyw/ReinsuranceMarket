@@ -154,11 +154,20 @@ public class Reinsurance extends ChaincodeBase {
 //			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
 //		}
 
-		if(function.equals("getCompanyById")) {
-            return this.getCompanyById(stub, args);
-        }else {
-		    return noMethodWarning();
-        }
+//		if(function.equals("getCompanyById")) {
+//            return this.getCompanyById(stub, args);
+//        }else {
+//		    return noMethodWarning();
+//        }
+
+		switch (function) {
+			case "getCompanyById":
+				return getCompanyById(stub, args);
+			case "getCompanys":
+				return getCompanys(stub, args);
+			default:
+				return noMethodWarning();
+		}
 
 
 
@@ -189,6 +198,10 @@ public class Reinsurance extends ChaincodeBase {
 
 	}
 
+	private String getCompanys(ChaincodeStub stub, String[] args) {
+		log.info("getCompanys<------------------>");
+		return "";
+	}
 
 	@Override
 	public String getChaincodeID() {
