@@ -141,9 +141,43 @@ public class Reinsurance extends ChaincodeBase {
 			return "{\"Error\":\"Incorrect number of arguments. Expecting name of the person to query\"}";
 		}
 		log.info("query <--------------------->");
+
+//		String am =stub.getState(args[0]);
+//		log.info("query am:<--------------------->"+am);
+//		if (am!=null&&!am.isEmpty()){
+//			try{
+//				int valA = Integer.parseInt(am);
+//				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
+//			}catch(NumberFormatException e ){
+//				return "{\"Error\":\"Expecting integer value for asset holding\"}";
+//			}		}else{
+//			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
+//		}
+
+		if(function.equals("getCompanyById")) {
+            return this.getCompanyById(stub, args);
+        }else {
+		    return noMethodWarning();
+        }
+
+
+
+	}
+
+    private String noMethodWarning() {
+        return "noMethodWarning";
+    }
+
+	private String getCompanyById(ChaincodeStub stub, String[] args) {
+		if(args.length!=1){
+			return "{\"Error\":\"Incorrect number of arguments. Expecting name of the person to query\"}";
+		}
 		String am =stub.getState(args[0]);
-		log.info("query am:<--------------------->"+am);
-		if (am!=null&&!am.isEmpty()){
+		if(am == null){
+			am ="am is empty";
+		}
+		log.info("getCompanyById am:"+am);
+		if (am !=null && !am.isEmpty()){
 			try{
 				int valA = Integer.parseInt(am);
 				return  "{\"Name\":\"" + args[0] + "\",\"Amount\":\"" + am + "\"}";
@@ -152,7 +186,6 @@ public class Reinsurance extends ChaincodeBase {
 			}		}else{
 			return "{\"Error\":\"Failed to get state for " + args[0] + "\"}";
 		}
-
 
 	}
 
