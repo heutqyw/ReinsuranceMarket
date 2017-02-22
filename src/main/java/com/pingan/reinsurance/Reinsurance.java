@@ -17,17 +17,21 @@ limitations under the License.
 package com.pingan.reinsurance;
 
 import com.alibaba.fastjson.JSONObject;
+import com.pingan.reinsurance.Dao.FacingPolicyDao;
+import com.pingan.reinsurance.Dao.FacingTreatyDao;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperledger.java.shim.ChaincodeBase;
 import org.hyperledger.java.shim.ChaincodeStub;
-//import org.hyperledger.protos.TableProto;
+import org.hyperledger.protos.TableProto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Reinsurance extends ChaincodeBase {
 	private static Log log = LogFactory.getLog(Reinsurance.class);
+	private FacingPolicyDao facingPolicyDao = new FacingPolicyDao();
+	private FacingTreatyDao facingTreatyDao = new FacingTreatyDao();
 
 
 	@Override
@@ -50,6 +54,8 @@ public class Reinsurance extends ChaincodeBase {
 				for (String arg : args)
 					stub.delState(arg);
 				break;
+			case "createCompany":
+				return createCompany(stub, args);
 			default:
 				return transfer(stub, args);
 		}
@@ -126,8 +132,11 @@ public class Reinsurance extends ChaincodeBase {
 			log.info("init args[1]:<--------------------->"+args[1]);
 			stub.putState(args[0], args[1]);
 			stub.putState(args[2], args[3]);
-			log.info("init args[2]:<--------------------->"+args[2]);
-			log.info("init args[3]:<--------------------->"+args[3]);
+
+			facingPolicyDao.createFacPolicyTable(stub);
+			facingTreatyDao.createFacTreatyTable(stub);
+
+
 		}catch(NumberFormatException e ){
 			return "{\"Error\":\"Expecting integer value for asset holding\"}";
 		}
@@ -165,6 +174,10 @@ public class Reinsurance extends ChaincodeBase {
 				return getCompanyById(stub, args);
 			case "getCompanys":
 				return getCompanys(stub, args);
+			case "getFacingPolicy":
+				return facingPolicyDao.query(stub, args);
+			case "getFacingTreaty":
+				return facingTreatyDao.query(stub, args);
 			default:
 				return noMethodWarning();
 		}
@@ -200,6 +213,10 @@ public class Reinsurance extends ChaincodeBase {
 
 	private String getCompanys(ChaincodeStub stub, String[] args) {
 		log.info("getCompanys<------------------>");
+		return "";
+	}
+
+	private String createCompany(ChaincodeStub stub, String[] args) {
 		return "";
 	}
 

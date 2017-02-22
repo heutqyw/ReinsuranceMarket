@@ -86,6 +86,11 @@ task copyToLib(type: Copy) {
     into "$buildDir/libs"
     from configurations.runtime
 }
+
+tasks.withType(JavaCompile){
+    options.encoding='UTF-8'
+}
+
 build.finalizedBy(copyToLib)
 
 
