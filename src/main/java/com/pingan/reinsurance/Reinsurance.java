@@ -23,10 +23,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperledger.java.shim.ChaincodeBase;
 import org.hyperledger.java.shim.ChaincodeStub;
-import org.hyperledger.protos.TableProto;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Reinsurance extends ChaincodeBase {
 	private static Log log = LogFactory.getLog(Reinsurance.class);
@@ -56,6 +52,24 @@ public class Reinsurance extends ChaincodeBase {
 				break;
 			case "createCompany":
 				return createCompany(stub, args);
+			case "saveFacingTreaty":
+				facingTreatyDao.insertRow(stub, args,false);
+				break;
+			case "editFacingTreaty":
+				facingTreatyDao.insertRow(stub, args,true);
+				break;
+			case "saveFacingPolicy":
+				facingPolicyDao.insertRow(stub, args,false);
+				break;
+			case "editFacingPolicy":
+				facingPolicyDao.insertRow(stub, args,true);
+				break;
+			case "deleteFacingPolicy":
+				facingPolicyDao.delete(stub, args);
+				break;
+			case "deleteFacingTreaty":
+				facingTreatyDao.delete(stub, args);
+				break;
 			default:
 				return transfer(stub, args);
 		}

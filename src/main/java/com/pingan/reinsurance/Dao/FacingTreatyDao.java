@@ -1,5 +1,8 @@
 package com.pingan.reinsurance.Dao;
 
+import com.alibaba.fastjson.JSON;
+import com.pingan.reinsurance.entity.FacingPolicy;
+import com.pingan.reinsurance.entity.FacingTreaty;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperledger.java.shim.ChaincodeStub;
@@ -80,38 +83,41 @@ public class FacingTreatyDao {
 
     public void insertRow(ChaincodeStub stub, String[] args, boolean update) {
 
-        String fieldID = "";
+//        String fieldID = "";
+//
+//        try {
+//            if(update){
+//                fieldID = args[0];
+//            }else{
+//                fieldID = stub.getUuid();
+//            }
+//
+//        }catch (NumberFormatException e){
+//            log.error("Illegal field id -" + e.getMessage());
+//            return;
+//        }
 
-        try {
-            if(update){
-                fieldID = args[0];
-            }else{
-                fieldID = stub.getUuid();
-            }
-
-        }catch (NumberFormatException e){
-            log.error("Illegal field id -" + e.getMessage());
-            return;
-        }
+        log.info("facingTreaty insertRow String:"+args[0]);
+        FacingTreaty facingTreaty=(FacingTreaty) JSON.parseObject(args[0].toString(), FacingTreaty.class);
 
         TableProto.Column col1 =
                 TableProto.Column.newBuilder()
-                        .setString(fieldID).build();
+                        .setString(facingTreaty.getFacCode()).build();
         TableProto.Column col2 =
                 TableProto.Column.newBuilder()
-                        .setString(args[1]).build();
+                        .setString(facingTreaty.getPolicyCode()).build();
         TableProto.Column col3 =
                 TableProto.Column.newBuilder()
-                        .setString(args[2]).build();
+                        .setString(facingTreaty.getReinsurerCode()).build();
         TableProto.Column col4 =
                 TableProto.Column.newBuilder()
-                        .setInt32(Integer.parseInt(args[3])).build();
+                        .setInt32(facingTreaty.getReinsurerCeded()).build();
         TableProto.Column col5 =
                 TableProto.Column.newBuilder()
-                        .setInt32(Integer.parseInt(args[4])).build();
+                        .setInt32(facingTreaty.getFacAmount()).build();
         TableProto.Column col6 =
                 TableProto.Column.newBuilder()
-                        .setString(args[5]).build();
+                        .setString(facingTreaty.getCreateDate()).build();
 
 
         List<TableProto.Column> cols = new ArrayList<TableProto.Column>();
@@ -160,7 +166,10 @@ public class FacingTreatyDao {
         try {
             TableProto.Row tableRow = stub.getRow(tableName,key);
             if (tableRow.getSerializedSize() > 0) {
-                return tableRow.getColumns(1).getString();
+                //return tableRow.getColumns(1).getString();
+                String result = JSON.toJSONString(tableRow);
+                log.info("FacingTreatyDao query result:"+result);
+                return result;
             }else
             {
                 return "No record found !";
@@ -169,6 +178,18 @@ public class FacingTreatyDao {
             invalidProtocolBufferException.printStackTrace();
         }
         return "No record found !";
+    }
+
+
+    public boolean delete(ChaincodeStub stub, String[] args){
+        String fieldID = args[0];
+        log.info("FacingTreatyDao delete fieldID<----------------->:"+fieldID);
+        TableProto.Column queryCol =
+                TableProto.Column.newBuilder()
+                        .setString(fieldID).build();
+        List<TableProto.Column> key = new ArrayList<>();
+        key.add(queryCol);
+        return stub.deleteRow(tableName, key);
     }
 
 }

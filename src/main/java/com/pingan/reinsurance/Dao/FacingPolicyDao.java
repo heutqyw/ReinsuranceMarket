@@ -1,6 +1,8 @@
 package com.pingan.reinsurance.Dao;
 
+import com.alibaba.fastjson.JSON;
 import com.pingan.reinsurance.Reinsurance;
+import com.pingan.reinsurance.entity.FacingPolicy;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hyperledger.java.shim.ChaincodeStub;
@@ -108,50 +110,52 @@ public class FacingPolicyDao {
 
     public void insertRow(ChaincodeStub stub, String[] args, boolean update) {
 
-        String fieldID = "";
-
-        try {
-            if(update){
-                fieldID = args[0];
-            }else{
-                fieldID = stub.getUuid();
-            }
-
-        }catch (NumberFormatException e){
-            log.error("Illegal field id -" + e.getMessage());
-            return;
-        }
+//        String fieldID = "";
+//
+//        try {
+//            if(update){
+//                fieldID = args[0];
+//            }else{
+//                fieldID = stub.getUuid();
+//            }
+//
+//        }catch (NumberFormatException e){
+//            log.error("Illegal field id -" + e.getMessage());
+//            return;
+//        }
+        log.info("facingPolicy insertRow String:"+args[0]);
+        FacingPolicy facingPolicy=(FacingPolicy) JSON.parseObject(args[0].toString(), FacingPolicy.class);
 
         TableProto.Column col1 =
                 TableProto.Column.newBuilder()
-                        .setString(fieldID).build();
+                        .setString(facingPolicy.getPolicyNo()).build();
         TableProto.Column col2 =
                 TableProto.Column.newBuilder()
-                        .setString(args[1]).build();
+                        .setString(facingPolicy.getPolicyName()).build();
         TableProto.Column col3 =
                 TableProto.Column.newBuilder()
-                        .setString(args[2]).build();
+                        .setString(facingPolicy.getCreatedBy()).build();
         TableProto.Column col4 =
                 TableProto.Column.newBuilder()
-                        .setInt32(Integer.parseInt(args[3])).build();
+                        .setInt32(facingPolicy.getCededStatus()).build();
         TableProto.Column col5 =
                 TableProto.Column.newBuilder()
-                        .setString(args[4]).build();
+                        .setString(facingPolicy.getBegineTime()).build();
         TableProto.Column col6 =
                 TableProto.Column.newBuilder()
-                        .setString(args[5]).build();
+                        .setString(facingPolicy.getEndTime()).build();
         TableProto.Column col7 =
                 TableProto.Column.newBuilder()
-                        .setInt32(Integer.parseInt(args[6])).build();
+                        .setInt32(facingPolicy.getOwnAmount()).build();
         TableProto.Column col8 =
                 TableProto.Column.newBuilder()
-                        .setInt32(Integer.parseInt(args[7])).build();
+                        .setInt32(facingPolicy.getOwnRate()).build();
         TableProto.Column col9 =
                 TableProto.Column.newBuilder()
-                        .setInt32(Integer.parseInt(args[8])).build();
+                        .setInt32(facingPolicy.getRiAmount()).build();
         TableProto.Column col10 =
                 TableProto.Column.newBuilder()
-                        .setString(args[9]).build();
+                        .setString(facingPolicy.getDescription()).build();
 
         List<TableProto.Column> cols = new ArrayList<TableProto.Column>();
         cols.add(col1);
@@ -204,7 +208,10 @@ public class FacingPolicyDao {
         try {
             TableProto.Row tableRow = stub.getRow(tableName,key);
             if (tableRow.getSerializedSize() > 0) {
-                return tableRow.getColumns(1).getString();
+                //return tableRow.getColumns(1).getString();
+                String result = JSON.toJSONString(tableRow);
+                log.info("FacingPolicyDao query result:"+result);
+                return result;
             }else
             {
                 return "No record found !";
@@ -212,7 +219,18 @@ public class FacingPolicyDao {
         } catch (Exception invalidProtocolBufferException) {
             invalidProtocolBufferException.printStackTrace();
         }
-        return "";
+        return "No record found !";
+    }
+
+    public boolean delete(ChaincodeStub stub, String[] args){
+        String fieldID = args[0];
+        log.info("FacingPolicyDao delete fieldID<----------------->:"+fieldID);
+        TableProto.Column queryCol =
+                TableProto.Column.newBuilder()
+                        .setString(fieldID).build();
+        List<TableProto.Column> key = new ArrayList<>();
+        key.add(queryCol);
+        return stub.deleteRow(tableName, key);
     }
 
 }
