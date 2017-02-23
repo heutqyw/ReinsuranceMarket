@@ -16,7 +16,6 @@ limitations under the License.
 
 package com.pingan.reinsurance;
 
-import com.alibaba.fastjson.JSONObject;
 import com.pingan.reinsurance.Dao.FacingPolicyDao;
 import com.pingan.reinsurance.Dao.FacingTreatyDao;
 import org.apache.commons.logging.Log;
@@ -238,6 +237,7 @@ public class Reinsurance extends ChaincodeBase {
 	public String getChaincodeID() {
 		return "Reinsurance";
 	}
+
 
 	public static void main(String[] args) throws Exception {
 		new Reinsurance().start(args);

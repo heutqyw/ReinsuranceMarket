@@ -209,8 +209,37 @@ public class FacingPolicyDao {
             TableProto.Row tableRow = stub.getRow(tableName,key);
             if (tableRow.getSerializedSize() > 0) {
                 //return tableRow.getColumns(1).getString();
-                String result = JSON.toJSONString(tableRow);
+                //String result = JSON.toJSONString(tableRow);
+
+                String policyNo= tableRow.getColumns(1).getString();
+                log.info("FacingPolicyDao query index1 policyNo:"+policyNo);
+                String policyName= tableRow.getColumns(2).getString();
+                log.info("FacingPolicyDao query index2 policyName:"+policyName);
+                String createdBy= tableRow.getColumns(3).getString();
+                int cededStatus= tableRow.getColumns(4).getInt32();
+                String begineTime= tableRow.getColumns(5).getString();
+                String endTime= tableRow.getColumns(6).getString();
+                int ownAmount= tableRow.getColumns(7).getInt32();
+                int ownRate= tableRow.getColumns(8).getInt32();
+                int riAmount= tableRow.getColumns(9).getInt32();
+                String description= tableRow.getColumns(10).getString();
+                log.info("FacingPolicyDao query index2 policyName:"+policyName);
+
+                FacingPolicy facingPolicy = new FacingPolicy();
+                facingPolicy.setPolicyNo(policyNo);
+                facingPolicy.setPolicyName(policyName);
+                facingPolicy.setCededStatus(cededStatus);
+                facingPolicy.setBegineTime(begineTime);
+                facingPolicy.setCreatedBy(createdBy);
+                facingPolicy.setDescription(description);
+                facingPolicy.setEndTime(endTime);
+                facingPolicy.setOwnAmount(ownAmount);
+                facingPolicy.setOwnRate(ownRate);
+                facingPolicy.setRiAmount(riAmount);
+
+                String result = JSON.toJSONString(facingPolicy);
                 log.info("FacingPolicyDao query result:"+result);
+
                 return result;
             }else
             {
@@ -230,7 +259,9 @@ public class FacingPolicyDao {
                         .setString(fieldID).build();
         List<TableProto.Column> key = new ArrayList<>();
         key.add(queryCol);
-        return stub.deleteRow(tableName, key);
+        boolean result = stub.deleteRow(tableName, key);
+        log.info("FacingPolicyDao delete result<----------------->:"+result);
+        return result;
     }
 
 }

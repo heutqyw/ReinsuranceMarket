@@ -167,8 +167,26 @@ public class FacingTreatyDao {
             TableProto.Row tableRow = stub.getRow(tableName,key);
             if (tableRow.getSerializedSize() > 0) {
                 //return tableRow.getColumns(1).getString();
-                String result = JSON.toJSONString(tableRow);
+
+                String facCode= tableRow.getColumns(1).getString();
+                log.info("FacingTreatyDao query index1:"+facCode);
+                String policyCode= tableRow.getColumns(2).getString();
+                String reinsurerCode= tableRow.getColumns(3).getString();
+                int reinsurerCeded= tableRow.getColumns(4).getInt32();
+                int facAmount= tableRow.getColumns(5).getInt32();
+                String createDate= tableRow.getColumns(6).getString();
+
+                FacingTreaty facingTreaty = new FacingTreaty();
+                facingTreaty.setCreateDate(createDate);
+                facingTreaty.setFacAmount(facAmount);
+                facingTreaty.setFacCode(facCode);
+                facingTreaty.setPolicyCode(policyCode);
+                facingTreaty.setReinsurerCeded(reinsurerCeded);
+                facingTreaty.setReinsurerCode(reinsurerCode);
+
+                String result = JSON.toJSONString(facingTreaty);
                 log.info("FacingTreatyDao query result:"+result);
+
                 return result;
             }else
             {
@@ -189,7 +207,9 @@ public class FacingTreatyDao {
                         .setString(fieldID).build();
         List<TableProto.Column> key = new ArrayList<>();
         key.add(queryCol);
-        return stub.deleteRow(tableName, key);
+        boolean result = stub.deleteRow(tableName, key);
+        log.info("FacingTreatyDao delete result<----------------->:"+result);
+        return result;
     }
 
 }
