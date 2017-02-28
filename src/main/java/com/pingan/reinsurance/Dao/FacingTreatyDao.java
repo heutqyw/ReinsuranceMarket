@@ -102,7 +102,7 @@ public class FacingTreatyDao {
 
         TableProto.Column col1 =
                 TableProto.Column.newBuilder()
-                        .setString(facingTreaty.getFacCode()).build();
+                        .setString(stub.getUuid()).build();
         TableProto.Column col2 =
                 TableProto.Column.newBuilder()
                         .setString(facingTreaty.getPolicyCode()).build();

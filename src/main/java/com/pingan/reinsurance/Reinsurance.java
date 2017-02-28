@@ -240,6 +240,7 @@ public class Reinsurance extends ChaincodeBase {
 
 
 	public static void main(String[] args) throws Exception {
+
 		new Reinsurance().start(args);
 	}
 

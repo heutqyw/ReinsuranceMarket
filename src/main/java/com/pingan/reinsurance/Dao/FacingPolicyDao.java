@@ -27,7 +27,7 @@ public class FacingPolicyDao {
         cols.add(TableProto.ColumnDefinition.newBuilder()
                 .setName("policy_no")
                 .setKey(true)
-                .setType(TableProto.ColumnDefinition.Type.STRING)
+                .setType(TableProto.ColumnDefinition.Type.INT32)
                 .build()
         );
 
@@ -94,6 +94,14 @@ public class FacingPolicyDao {
                 .build()
         );
 
+        cols.add(TableProto.ColumnDefinition.newBuilder()
+                .setName("insurable_amount")
+                .setKey(false)
+                .setType(TableProto.ColumnDefinition.Type.INT32)
+                .build()
+        );
+
+
         try {
             try {
                 stub.deleteTable(tableName);
@@ -128,7 +136,7 @@ public class FacingPolicyDao {
 
         TableProto.Column col1 =
                 TableProto.Column.newBuilder()
-                        .setString(facingPolicy.getPolicyNo()).build();
+                        .setInt32(facingPolicy.getPolicyNo()).build();
         TableProto.Column col2 =
                 TableProto.Column.newBuilder()
                         .setString(facingPolicy.getPolicyName()).build();
@@ -157,6 +165,10 @@ public class FacingPolicyDao {
                 TableProto.Column.newBuilder()
                         .setString(facingPolicy.getDescription()).build();
 
+        TableProto.Column col11 =
+                TableProto.Column.newBuilder()
+                        .setInt32(facingPolicy.getInsurableAmount()).build();
+
         List<TableProto.Column> cols = new ArrayList<TableProto.Column>();
         cols.add(col1);
         cols.add(col2);
@@ -168,6 +180,7 @@ public class FacingPolicyDao {
         cols.add(col8);
         cols.add(col9);
         cols.add(col10);
+        cols.add(col11);
 
 
         TableProto.Row row = TableProto.Row.newBuilder()
@@ -211,7 +224,7 @@ public class FacingPolicyDao {
                 //return tableRow.getColumns(1).getString();
                 //String result = JSON.toJSONString(tableRow);
 
-                String policyNo= tableRow.getColumns(1).getString();
+                int policyNo= tableRow.getColumns(1).getInt32();
                 log.info("FacingPolicyDao query index1 policyNo:"+policyNo);
                 String policyName= tableRow.getColumns(2).getString();
                 log.info("FacingPolicyDao query index2 policyName:"+policyName);
@@ -223,6 +236,7 @@ public class FacingPolicyDao {
                 int ownRate= tableRow.getColumns(8).getInt32();
                 int riAmount= tableRow.getColumns(9).getInt32();
                 String description= tableRow.getColumns(10).getString();
+                int insurableAmount= tableRow.getColumns(11).getInt32();
                 log.info("FacingPolicyDao query index2 policyName:"+policyName);
 
                 FacingPolicy facingPolicy = new FacingPolicy();
@@ -236,6 +250,7 @@ public class FacingPolicyDao {
                 facingPolicy.setOwnAmount(ownAmount);
                 facingPolicy.setOwnRate(ownRate);
                 facingPolicy.setRiAmount(riAmount);
+                facingPolicy.setInsurableAmount(insurableAmount);
 
                 String result = JSON.toJSONString(facingPolicy);
                 log.info("FacingPolicyDao query result:"+result);
@@ -246,6 +261,7 @@ public class FacingPolicyDao {
                 return "No record found !";
             }
         } catch (Exception invalidProtocolBufferException) {
+            log.info("FacingPolicyDao query result:");
             invalidProtocolBufferException.printStackTrace();
         }
         return "No record found !";

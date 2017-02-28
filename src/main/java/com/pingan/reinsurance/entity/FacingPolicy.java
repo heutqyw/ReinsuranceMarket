@@ -6,7 +6,7 @@ package com.pingan.reinsurance.entity;
  */
 public class FacingPolicy {
     //保单号
-    private String policyNo;
+    private int policyNo;
     //保单名称
     private String policyName;
     //创建人
@@ -24,11 +24,14 @@ public class FacingPolicy {
     //描述
     private String description;
 
-    public String getPolicyNo() {
+    //可保额度
+    private int insurableAmount;
+
+    public int getPolicyNo() {
         return policyNo;
     }
 
-    public void setPolicyNo(String policyNo) {
+    public void setPolicyNo(int policyNo) {
         this.policyNo = policyNo;
     }
 
@@ -102,6 +105,14 @@ public class FacingPolicy {
 
     public void setPolicyName(String policyName) {
         this.policyName = policyName;
+    }
+
+    public int getInsurableAmount() {
+        return insurableAmount;
+    }
+
+    public void setInsurableAmount(int insurableAmount) {
+        this.insurableAmount = insurableAmount;
     }
 
 }
