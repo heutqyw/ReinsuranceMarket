@@ -204,7 +204,7 @@ public class FacingPolicyDao {
     }
 
     public String query(ChaincodeStub stub, String[] args){
-        log.info("FacingPolicyDao query");
+        log.info("FacingPolicyDao query fieldID:"+args[0]);
         String fieldID = "";
 
         try {
@@ -224,20 +224,23 @@ public class FacingPolicyDao {
                 //return tableRow.getColumns(1).getString();
                 //String result = JSON.toJSONString(tableRow);
 
-                int policyNo= tableRow.getColumns(1).getInt32();
-                log.info("FacingPolicyDao query index1 policyNo:"+policyNo);
-                String policyName= tableRow.getColumns(2).getString();
-                log.info("FacingPolicyDao query index2 policyName:"+policyName);
-                String createdBy= tableRow.getColumns(3).getString();
-                int cededStatus= tableRow.getColumns(4).getInt32();
-                String begineTime= tableRow.getColumns(5).getString();
-                String endTime= tableRow.getColumns(6).getString();
-                int ownAmount= tableRow.getColumns(7).getInt32();
-                int ownRate= tableRow.getColumns(8).getInt32();
-                int riAmount= tableRow.getColumns(9).getInt32();
-                String description= tableRow.getColumns(10).getString();
-                int insurableAmount= tableRow.getColumns(11).getInt32();
-                log.info("FacingPolicyDao query index2 policyName:"+policyName);
+                int policyNo= tableRow.getColumns(0).getInt32();
+                log.info("FacingPolicyDao query index0 policyNo:"+policyNo);
+                String policyName= tableRow.getColumns(1).getString();
+                log.info("FacingPolicyDao query index1 policyName:"+policyName);
+                String createdBy= tableRow.getColumns(2).getString();
+                log.info("FacingPolicyDao query index2 createdBy:"+createdBy);
+                int cededStatus= tableRow.getColumns(3).getInt32();
+                log.info("FacingPolicyDao query index3 cededStatus:"+cededStatus);
+                String begineTime= tableRow.getColumns(4).getString();
+                log.info("FacingPolicyDao query index4 begineTime:"+begineTime);
+                String endTime= tableRow.getColumns(5).getString();
+                int ownAmount= tableRow.getColumns(6).getInt32();
+                int ownRate= tableRow.getColumns(7).getInt32();
+                int riAmount= tableRow.getColumns(8).getInt32();
+                String description= tableRow.getColumns(9).getString();
+                int insurableAmount= tableRow.getColumns(10).getInt32();
+                log.info("FacingPolicyDao query index10 insurableAmount:"+insurableAmount);
 
                 FacingPolicy facingPolicy = new FacingPolicy();
                 facingPolicy.setPolicyNo(policyNo);

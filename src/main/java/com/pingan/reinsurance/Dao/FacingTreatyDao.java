@@ -168,13 +168,14 @@ public class FacingTreatyDao {
             if (tableRow.getSerializedSize() > 0) {
                 //return tableRow.getColumns(1).getString();
 
-                String facCode= tableRow.getColumns(1).getString();
-                log.info("FacingTreatyDao query index1:"+facCode);
-                String policyCode= tableRow.getColumns(2).getString();
-                String reinsurerCode= tableRow.getColumns(3).getString();
-                int reinsurerCeded= tableRow.getColumns(4).getInt32();
-                int facAmount= tableRow.getColumns(5).getInt32();
-                String createDate= tableRow.getColumns(6).getString();
+                String facCode= tableRow.getColumns(0).getString();
+                log.info("FacingTreatyDao query index0:"+facCode);
+                String policyCode= tableRow.getColumns(1).getString();
+                String reinsurerCode= tableRow.getColumns(2).getString();
+                int reinsurerCeded= tableRow.getColumns(3).getInt32();
+                int facAmount= tableRow.getColumns(4).getInt32();
+                String createDate= tableRow.getColumns(5).getString();
+                log.info("FacingTreatyDao query index5:"+createDate);
 
                 FacingTreaty facingTreaty = new FacingTreaty();
                 facingTreaty.setCreateDate(createDate);
